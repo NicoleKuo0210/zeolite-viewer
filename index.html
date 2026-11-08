@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>沸石串珠模型預覽</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #14171c; font-family: system-ui, "Noto Sans TC", sans-serif; color: #e6e8eb; }
+  #view { position: fixed; inset: 0; }
+  #panel {
+    position: fixed; top: 12px; left: 12px; width: 250px; max-height: calc(100% - 24px); overflow: auto;
+    background: rgba(28,32,39,.92); border: 1px solid #2c323c; border-radius: 10px; padding: 14px; font-size: 13px;
+  }
+  #panel h1 { font-size: 15px; margin: 0 0 10px; }
+  #panel h2 { font-size: 12px; margin: 14px 0 6px; color: #9aa3b0; font-weight: 600; letter-spacing: .04em; }
+  label.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 6px 0; }
+  select, input[type=range] { width: 100%; }
+  select { background: #1f242c; color: inherit; border: 1px solid #343b46; border-radius: 6px; padding: 5px; }
+  input[type=color] { width: 40px; height: 24px; border: 1px solid #343b46; border-radius: 4px; background: none; padding: 0; }
+  #search { width: 100%; box-sizing: border-box; background: #1f242c; color: inherit; border: 1px solid #343b46; border-radius: 6px; padding: 7px 8px; font-size: 13px; }
+  #search:focus { outline: none; border-color: #3b82f6; }
+  #results { margin-top: 6px; max-height: 190px; overflow: auto; border: 1px solid #2c323c; border-radius: 6px; background: #1a1e25; }
+  .item { padding: 5px 8px; cursor: pointer; display: flex; justify-content: space-between; gap: 6px; }
+  .item .nm { color: #9aa3b0; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item:hover, .item.active { background: #2a3140; }
+  .item.cur .cd { color: #f59e0b; font-weight: 600; }
+  .empty { padding: 8px; color: #9aa3b0; font-size: 12px; }
+  #current { color: #9aa3b0; font-size: 12px; margin-top: 6px; }
+  #info { color: #9aa3b0; font-size: 12px; line-height: 1.5; margin-top: 10px; }
+  #msg { position: fixed; bottom: 12px; left: 12px; color: #f59e0b; font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+<div id="panel">
+  <h1>沸石串珠模型</h1>
+  <h2>結構</h2>
+  <input id="search" type="search" placeholder="搜尋代碼或名稱，如 LTA、FAU、ZSM（按 / 快速聚焦）" autocomplete="off" spellcheck="false">
+  <div id="results" role="listbox" aria-label="結構清單"></div>
+  <div id="current"></div>
+
+  <h2>配色方式</h2>
+  <select id="mode">
+    <option value="unit">依結構單元（d4r / 其他）</option>
+    <option value="ring">依最小環大小</option>
+    <option value="sig">依所屬環組合（4 / 4+6 / 4+6+8…）</option>
+  </select>
+  <div id="colors"></div>
+
+  <h2>顯示</h2>
+  <label class="row">珠子大小 <input id="size" type="range" min="0.3" max="1.2" step="0.01" value="0.95"></label>
+  <label class="row"><span>顯示 T 原子（Si / Al）</span><input id="atoms" type="checkbox"></label>
+  <div id="atomColors" style="display:none"></div>
+  <label class="row"><span>自動旋轉</span><input id="rotate" type="checkbox"></label>
+
+  <div id="info"></div>
+</div>
+<div id="msg"></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="main.js"></script>
+</body>
+</html>
